@@ -1,5 +1,5 @@
 ﻿
-namespace TinyCompiler
+namespace TINY_Compiler
 {
     partial class HomePage
     {
