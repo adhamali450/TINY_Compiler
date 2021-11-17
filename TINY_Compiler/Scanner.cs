@@ -22,7 +22,7 @@ namespace TINY_Compiler
                 signedFloat = $@"{signedInt}(\.?{number}+)*",
 
                 literalString = $"\".*\"",
-                reservedWord = $@":int|float|string|read|write|repeat|until|if|elseif|else|then|return|endl",
+                reservedWord = $@"int|float|string|read|write|repeat|until|if|elseif|else|then|return|endl",
                 commentStatement = $@"/\*(?s).*\*/",
                 ident = $@"{letter}+({letter}|{number})*",
                 functionCall = $@"{ident}\s*\(\s*({ident}(\s*,\s*{ident})*)*\s*\)",
