@@ -17,5 +17,34 @@ namespace TINY_Compiler
             InitializeComponent();
         }
 
+        private void clearList()
+        {
+            ListTokens.Rows.Clear();
+            TINY_Compiler.TokenStream.Clear();
+        }
+        
+        void PrintTokens()
+        {
+            for (int i = 0; i < TINY_Compiler.TinyScanner.Tokens.Count; i++)
+            {
+                ListTokens.Rows.Add(
+                    TINY_Compiler.TinyScanner.Tokens
+                    .ElementAt(i).Lexeme, TINY_Compiler.TinyScanner.Tokens.ElementAt(i).TokenType);
+            }
+        }
+
+        private void btnCompile_Click(object sender, EventArgs e)
+        {
+            clearList();
+
+            string srcCode = boxSrc.Text;
+            TINY_Compiler.Start_Compiling(srcCode);
+            PrintTokens();
+        }
+
+        private void btnClearList_Click(object sender, EventArgs e)
+        {
+            clearList();
+        }
     }
 }
