@@ -189,13 +189,7 @@ namespace TINY_Compiler
                         }
                         else
                         {
-
-                            // TODO: Validate difference
-
                             tokenClass = Token_Class.String;
-                            Tokens.Add(new Token() { Lexeme = currentLexeme, TokenType = tokenClass });
-
-                            //FindTokenClass(currentLexeme);
                         }
                         
                         i = j;
@@ -234,7 +228,7 @@ namespace TINY_Compiler
                         if (!returned)
                             Errors.Error_List.Add("Invalid constant  " + currentLexeme);
                         else
-                            FindTokenClass(currentLexeme);
+                            tokenClass = Token_Class.Constant;
 
                         i = j;
 
@@ -273,8 +267,8 @@ namespace TINY_Compiler
                         if (!returned)
                             Errors.Error_List.Add("Invalid comment " + currentLexeme);
                         else
-                            FindTokenClass(currentLexeme);
-                        
+                            tokenClass = Token_Class.Comment;
+
                         i = j;
                     }
                 }
@@ -305,7 +299,11 @@ namespace TINY_Compiler
                         if (!returned)
                             Errors.Error_List.Add("Invalid identifier  " + currentLexeme);
                         else
-                            FindTokenClass(currentLexeme);
+                        {
+                            tokenClass = getReservedWordTokenClass(currentLexeme);
+                            if (tokenClass == Token_Class.Undifined)
+                                tokenClass = Token_Class.Idenifier;
+                        }
 
                         i = j;
                     }
@@ -319,7 +317,7 @@ namespace TINY_Compiler
                 // single character operators (i.e. +, -, *, /)
                 else if (Operators.ContainsKey(currentLexeme))
                 {
-                    FindTokenClass(currentLexeme);
+                    tokenClass = Operators[currentLexeme];
                 }
 
                 // assignment operator :=
@@ -327,7 +325,7 @@ namespace TINY_Compiler
                 {
                     j++;
                     i = j;
-                    FindTokenClass(":=");
+                    tokenClass = Operators[":="];
                 }
 
                 // &&, ||
@@ -335,14 +333,26 @@ namespace TINY_Compiler
                     (currentChar == '|' && sourceCode[i + 1] == '|'))
                 {
                     currentLexeme += sourceCode[i + 1];
+                    tokenClass = Operators[currentLexeme];
+
                     j += 2;
                     i = j;
-                    FindTokenClass(currentLexeme);
                 }
 
+                Tokens.Add(new Token() { Lexeme = currentLexeme, TokenType = tokenClass });
             }
 
             TINY_Compiler.TokenStream = Tokens;
+        }
+
+        Token_Class getReservedWordTokenClass(string lexeme)
+        {
+            Token_Class tokenClass = Token_Class.Undifined;
+
+            if (ReservedWords.ContainsKey(lexeme))
+                tokenClass = ReservedWords[lexeme];
+
+            return tokenClass;
         }
 
         void FindTokenClass(string lex)
@@ -385,7 +395,6 @@ namespace TINY_Compiler
 
             Tokens.Add(new Token() { Lexeme = lex, TokenType = tokenClass });
         }
-
 
         bool isIdentifier(string lex)
         {
