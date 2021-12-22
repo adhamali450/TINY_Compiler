@@ -36,7 +36,7 @@ namespace TINY_Compiler
             this.tokenClasses = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnCompile = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.boxErrors = new System.Windows.Forms.TextBox();
             this.btnClearList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ListTokens)).BeginInit();
             this.SuspendLayout();
@@ -118,19 +118,19 @@ namespace TINY_Compiler
             this.label2.TabIndex = 4;
             this.label2.Text = "Error List";
             // 
-            // textBox1
+            // boxErrors
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.boxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.textBox1.Location = new System.Drawing.Point(12, 582);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(931, 111);
-            this.textBox1.TabIndex = 5;
+            this.boxErrors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.boxErrors.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.boxErrors.ForeColor = System.Drawing.Color.Red;
+            this.boxErrors.Location = new System.Drawing.Point(12, 582);
+            this.boxErrors.Multiline = true;
+            this.boxErrors.Name = "boxErrors";
+            this.boxErrors.ReadOnly = true;
+            this.boxErrors.Size = new System.Drawing.Size(931, 111);
+            this.boxErrors.TabIndex = 5;
             // 
             // btnClearList
             // 
@@ -149,7 +149,7 @@ namespace TINY_Compiler
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(967, 705);
             this.Controls.Add(this.btnClearList);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.boxErrors);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnCompile);
             this.Controls.Add(this.ListTokens);
@@ -172,7 +172,7 @@ namespace TINY_Compiler
         private System.Windows.Forms.DataGridViewTextBoxColumn tokenClasses;
         private System.Windows.Forms.Button btnCompile;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox boxErrors;
         private System.Windows.Forms.Button btnClearList;
     }
 }
