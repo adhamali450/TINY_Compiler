@@ -45,6 +45,8 @@ namespace TINY_Compiler
                 boxErrors.AppendText($"{Environment.NewLine}[{i+1}] {Errors.Error_List[i]}");
         }
 
+
+        //https://www.youtube.com/watch?v=gWWthx5Ow0Q&t=345s
         private void btnCompile_Click(object sender, EventArgs e)
         {
             ClearTokensList();
@@ -61,5 +63,6 @@ namespace TINY_Compiler
             ClearTokensList();
             ClearErrorsList();
         }
+
     }
 }

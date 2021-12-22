@@ -61,23 +61,25 @@ namespace TINY_Compiler
             this.boxSrc.Location = new System.Drawing.Point(12, 43);
             this.boxSrc.Multiline = true;
             this.boxSrc.Name = "boxSrc";
-            this.boxSrc.Size = new System.Drawing.Size(621, 436);
+            this.boxSrc.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.boxSrc.Size = new System.Drawing.Size(622, 436);
             this.boxSrc.TabIndex = 1;
             // 
             // ListTokens
             // 
             this.ListTokens.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.ListTokens.BackgroundColor = System.Drawing.SystemColors.ScrollBar;
             this.ListTokens.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ListTokens.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.lexemes,
             this.tokenClasses});
-            this.ListTokens.Location = new System.Drawing.Point(639, 43);
+            this.ListTokens.Location = new System.Drawing.Point(640, 43);
             this.ListTokens.Name = "ListTokens";
-            this.ListTokens.ReadOnly = true;
             this.ListTokens.RowHeadersWidth = 51;
             this.ListTokens.RowTemplate.Height = 29;
-            this.ListTokens.Size = new System.Drawing.Size(304, 436);
+            this.ListTokens.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.ListTokens.Size = new System.Drawing.Size(303, 436);
             this.ListTokens.TabIndex = 2;
             // 
             // lexemes
@@ -99,7 +101,7 @@ namespace TINY_Compiler
             // btnCompile
             // 
             this.btnCompile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCompile.Location = new System.Drawing.Point(486, 484);
+            this.btnCompile.Location = new System.Drawing.Point(487, 484);
             this.btnCompile.Name = "btnCompile";
             this.btnCompile.Size = new System.Drawing.Size(147, 30);
             this.btnCompile.TabIndex = 3;
@@ -112,7 +114,7 @@ namespace TINY_Compiler
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(12, 550);
+            this.label2.Location = new System.Drawing.Point(12, 534);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 23);
             this.label2.TabIndex = 4;
@@ -122,14 +124,16 @@ namespace TINY_Compiler
             // 
             this.boxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.boxErrors.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.boxErrors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.boxErrors.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.boxErrors.ForeColor = System.Drawing.Color.Red;
-            this.boxErrors.Location = new System.Drawing.Point(12, 582);
+            this.boxErrors.Location = new System.Drawing.Point(12, 560);
             this.boxErrors.Multiline = true;
             this.boxErrors.Name = "boxErrors";
             this.boxErrors.ReadOnly = true;
-            this.boxErrors.Size = new System.Drawing.Size(931, 111);
+            this.boxErrors.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.boxErrors.Size = new System.Drawing.Size(931, 133);
             this.boxErrors.TabIndex = 5;
             // 
             // btnClearList

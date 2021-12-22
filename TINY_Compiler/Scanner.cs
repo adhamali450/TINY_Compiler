@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -15,6 +16,7 @@ public enum Token_Class
     Return, Endl,
     
     LParanthesis, RParanthesis,
+    LCurlyBracket, RCurlyBracket,
     Semicolon, Comma,
 
     AndOp, OrOp,
@@ -121,6 +123,8 @@ namespace TINY_Compiler
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LParanthesis);
             Operators.Add(")", Token_Class.RParanthesis);
+            Operators.Add("{", Token_Class.LCurlyBracket);
+            Operators.Add("}", Token_Class.RCurlyBracket);
             Operators.Add("=", Token_Class.IsEqualOp);
             Operators.Add("<", Token_Class.IsLessThanOp);
             Operators.Add(">", Token_Class.IsGreaterThanOp);
@@ -133,170 +137,207 @@ namespace TINY_Compiler
             Operators.Add("&&", Token_Class.AndOp);
         }
         
-        public void StartScanning(string SourceCode)
+        public void StartScanning(string sourceCode)
         {
-            for (int i = 0; i < SourceCode.Length; i++)
+            for (int i = 0; i < sourceCode.Length; i++)
             {
-                bool flag = false;
-                int j = i;
-                char CurrentChar = SourceCode[i];
-                string CurrentLexeme = CurrentChar.ToString();
+                Token_Class tokenClass = Token_Class.Undifined;
 
-                if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n')
+                bool returned = false; // True when the lexeme generates a valid token
+                int j = i;
+                char currentChar = sourceCode[i];
+                string currentLexeme = currentChar.ToString();
+
+                if (currentChar == ' ' || currentChar == '\r' || currentChar == '\n')
                     continue;
-                
+
                 //string literal
-                else if (CurrentChar == '"')
+                else if (currentChar == '"')
                 {
-                    if (j + 1 < SourceCode.Length)
+                    returned = false; // we assume string is not valid until terminated with "
+                    Debug.WriteLine("Entering a string lexeme");
+
+                    if (j + 1 < sourceCode.Length)
                     {
-                        while (j + 1 < SourceCode.Length)
+                        while (j + 1 < sourceCode.Length)
                         {
-                            if (SourceCode[j + 1] == ' ' || SourceCode[j + 1] == '\r' || SourceCode[j + 1] == '\n')
+                            if (sourceCode[j + 1] == '\n')
                             {
                                 j++;
                                 continue;
                             }
 
-                            if (!char.IsLetterOrDigit(SourceCode[j + 1]) && SourceCode[j + 1] != '"')
-                                break;
+                            // TODO: remove if not needed
+                            /*if (!char.IsLetterOrDigit(SourceCode[j + 1]) && SourceCode[j + 1] != '"')
+                                break;*/
 
-
-                            CurrentLexeme += SourceCode[j + 1];
+                            currentLexeme += sourceCode[j + 1];
                             j++;
 
-                            if (SourceCode[j] == '"')
+                            if (sourceCode[j] == '"')
                             {
-
-                                i = j;
-                                flag = true;
+                                returned = true;
                                 break;
                             }
 
                         }
-                        if (!flag)
-                            Errors.Error_List.Add("Invalid String  " + CurrentLexeme);
+                        if (!returned)
+                        {
+                            string errorMsg = "\" expected at the end of " + currentLexeme;
+                            Errors.Error_List.Add(errorMsg);
+                            Debug.WriteLine(errorMsg);
+                        }
                         else
-                            FindTokenClass(CurrentLexeme);
+                        {
+
+                            // TODO: Validate difference
+
+                            tokenClass = Token_Class.String;
+                            Tokens.Add(new Token() { Lexeme = currentLexeme, TokenType = tokenClass });
+
+                            //FindTokenClass(currentLexeme);
+                        }
+                        
                         i = j;
                     }
                 }
                 
                 //constant (number)
-                else if (char.IsDigit(CurrentChar))
+                else if (char.IsDigit(currentChar))
                 {
-                    int count = 0;
-                    if (SourceCode.Length > j + 1)
+                    returned = true; // we assume number is valid Unitl otherwise 
+                    Debug.WriteLine("Entering a constant(number) lexeme");
+
+                    int points_count = 0;
+                    if (j + 1 < sourceCode.Length)
                     {
-                        while (char.IsLetterOrDigit(SourceCode[j + 1]) || SourceCode[j + 1] == '.')
+                        while (char.IsLetterOrDigit(sourceCode[j + 1]) || sourceCode[j + 1] == '.')
                         {
-                            if (char.IsLetter(SourceCode[j + 1]))
-                                flag = true;
-                            if (SourceCode[j + 1] == '.')
-                                count++;
+                            if (char.IsLetter(sourceCode[j + 1]))
+                                returned = false;
 
+                            if (sourceCode[j + 1] == '.')
+                                points_count++;
 
-                            CurrentLexeme += SourceCode[j + 1].ToString();
+                            currentLexeme += sourceCode[j + 1].ToString();
                             j++;
-                            if (SourceCode.Length == j + 1)
+
+                            if (j + 1 == sourceCode.Length)
                                 break;
 
                         }
-                        //Errors.Error_List.Add("i " + i);
-                        if (flag || count > 1)
-                            Errors.Error_List.Add("Invalid number  " + CurrentLexeme);
+
+
+                        if (points_count > 1)
+                            returned = false;
+
+                        if (!returned)
+                            Errors.Error_List.Add("Invalid constant  " + currentLexeme);
                         else
-                            FindTokenClass(CurrentLexeme);
+                            FindTokenClass(currentLexeme);
+
                         i = j;
 
                     }
                 }
 
                 //comment statement
-                else if (CurrentChar == '/' && SourceCode[i + 1] == '*')
+                else if (currentChar == '/' && sourceCode[i + 1] == '*')
                 {
+                    returned = false; // we assume comment is not valid until terminated with */
+                    Debug.WriteLine("Entering a comment lexeme");
 
-                    if (SourceCode.Length > j + 1)
+                    if (sourceCode.Length > j + 1)
                     {
-                        while (j + 1 < SourceCode.Length)
+                        while (j + 1 < sourceCode.Length)
                         {
-                            if (SourceCode[j + 1] == ' ' || SourceCode[j + 1] == '\r' || SourceCode[j + 1] == '\n')
-                            {
-                                j++;
-                                continue;
-                            }
+                            //any spaces or new lines shouldn't be ignored when it comes to comments
 
+                            //if (SourceCode[j + 1] == ' ' || SourceCode[j + 1] == '\r' || SourceCode[j + 1] == '\n')
+                            //{
+                            //    j++;
+                            //    continue;
+                            //}
 
-                            CurrentLexeme += SourceCode[j + 1];
-
+                            currentLexeme += sourceCode[j + 1];
                             j++;
-                            if (SourceCode[j - 1] == '*' && SourceCode[j] == '/')
+
+                            if (sourceCode[j - 1] == '*' && sourceCode[j] == '/')
                             {
-                                /*FindTokenClass(CurrentLexeme);*/
-
-                                flag = true;
-
+                                returned = true;
                                 break;
                             }
 
                         }
-                        if (!flag)
-                            Errors.Error_List.Add("Invalid comment  " + CurrentLexeme);
+
+                        if (!returned)
+                            Errors.Error_List.Add("Invalid comment " + currentLexeme);
                         else
-                            FindTokenClass(CurrentLexeme);
+                            FindTokenClass(currentLexeme);
+                        
                         i = j;
                     }
                 }
                 
                 //identifier or reserved word
-                else if (char.IsLetter(CurrentChar))
+                else if (char.IsLetter(currentChar))
                 {
-                    if (SourceCode[j + 1] == ' ' || SourceCode[j + 1] == '\r' || SourceCode[j + 1] == '\n')
-                        FindTokenClass(CurrentLexeme);
+                    returned = true; // we assume ident or reserved-word is valid until we encounter a symbol */
+                    Debug.WriteLine("Entering reserved-word OR identifier lexeme");
 
-                    else if (SourceCode.Length > j + 1)
+                    if (j + 1 < sourceCode.Length)
                     {
-                        while (j + 1 < SourceCode.Length)
+                        while (j + 1 < sourceCode.Length)
                         {
-
-                            if (!char.IsLetterOrDigit(SourceCode[j + 1]))
+                            // when we encounter a space, carrige, new line or a symbol, that's it with our res-word or ident
+                            if (sourceCode[j + 1] == ' ' || 
+                                sourceCode[j + 1] == '\r' || 
+                                sourceCode[j + 1] == '\n' ||
+                                (!char.IsLetterOrDigit(sourceCode[j + 1])))
+                            {
                                 break;
+                            }
 
-                            CurrentLexeme += SourceCode[j + 1];
-
+                            currentLexeme += sourceCode[j + 1];
                             j++;
-                            flag = true;
                         }
 
-                        FindTokenClass(CurrentLexeme);
+                        if (!returned)
+                            Errors.Error_List.Add("Invalid identifier  " + currentLexeme);
+                        else
+                            FindTokenClass(currentLexeme);
+
                         i = j;
                     }
                 }
 
-                //operator (except for assignment operator := and boolean operators &&, ||)
-                else if (Operators.ContainsKey(CurrentLexeme))
+                //operator
+                // we have 2 types of operators in TINY: 
+                //    - single character operators (i.e. +, -, *, /)
+                //    - double characters operators (i.e. !=, ||, &&)
+
+                // single character operators (i.e. +, -, *, /)
+                else if (Operators.ContainsKey(currentLexeme))
                 {
-                    j++;
-                    i = j;
-                    FindTokenClass(CurrentLexeme);
+                    FindTokenClass(currentLexeme);
                 }
 
-                //assignment operator :=
-                else if (CurrentChar == ':' && SourceCode[i + 1] == '=')
+                // assignment operator :=
+                else if (currentChar == ':' && sourceCode[i + 1] == '=')
                 {
-                    j+=2;
+                    j++;
                     i = j;
                     FindTokenClass(":=");
                 }
 
-                //assignment operator :=
-                else if ((CurrentChar == '&' && SourceCode[i + 1] == '&') || 
-                    (CurrentChar == '|' && SourceCode[i + 1] == '|'))
+                // &&, ||
+                else if ((currentChar == '&' && sourceCode[i + 1] == '&') ||
+                    (currentChar == '|' && sourceCode[i + 1] == '|'))
                 {
-                    CurrentLexeme += SourceCode[i + 1];
+                    currentLexeme += sourceCode[i + 1];
                     j += 2;
                     i = j;
-                    FindTokenClass(CurrentLexeme);
+                    FindTokenClass(currentLexeme);
                 }
 
             }
