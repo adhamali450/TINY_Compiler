@@ -320,23 +320,17 @@ namespace TINY_Compiler
                     tokenClass = Operators[currentLexeme];
                 }
 
-                // assignment operator :=
-                else if (currentChar == ':' && sourceCode[i + 1] == '=')
-                {
-                    j++;
-                    i = j;
-                    tokenClass = Operators[":="];
-                }
-
-                // &&, ||
-                else if ((currentChar == '&' && sourceCode[i + 1] == '&') ||
-                    (currentChar == '|' && sourceCode[i + 1] == '|'))
+                // double character (i.e. :=, &&, ||)
+                else if ((currentChar == ':' && sourceCode[i + 1] == '=') || 
+                         ((currentChar == '&' && sourceCode[i + 1] == '&')) || 
+                         ((currentChar == '|' && sourceCode[i + 1] == '|')))
                 {
                     currentLexeme += sourceCode[i + 1];
                     tokenClass = Operators[currentLexeme];
 
                     j += 2;
                     i = j;
+
                 }
 
                 Tokens.Add(new Token() { Lexeme = currentLexeme, TokenType = tokenClass });
@@ -347,92 +341,10 @@ namespace TINY_Compiler
 
         Token_Class getReservedWordTokenClass(string lexeme)
         {
-            Token_Class tokenClass = Token_Class.Undifined;
+            if (ReservedWords.ContainsKey(lexeme.ToUpper()))
+                return ReservedWords[lexeme.ToUpper()];
 
-            if (ReservedWords.ContainsKey(lexeme))
-                tokenClass = ReservedWords[lexeme];
-
-            return tokenClass;
-        }
-
-        void FindTokenClass(string lex)
-        {
-            lex = lex.ToUpper();
-            Token_Class tokenClass = Token_Class.Undifined;
-
-            //Is it a reserved word?
-            if(ReservedWords.ContainsKey(lex))
-            {
-                tokenClass = ReservedWords[lex];
-            }
-            // Is it a string?
-            else if (isString(lex))
-            {
-                tokenClass = Token_Class.String;
-            }
-            //Is it a comment?
-            else if (isComment(lex))
-            {
-                tokenClass = Token_Class.Comment;
-            }
-            //Is it an identifier?
-            else if (isIdentifier(lex))
-            {
-                tokenClass = Token_Class.Idenifier;
-            }
-            //Is it a Constant (number)?
-            else if (isConstant(lex))
-            {
-                tokenClass = Token_Class.Constant;
-            }
-            //Is it an operator?
-            else if (Operators.ContainsKey(lex))
-            {
-                tokenClass = Operators[lex];
-            }
-            //Is it an undefined?
-            else { }
-
-            Tokens.Add(new Token() { Lexeme = lex, TokenType = tokenClass });
-        }
-
-        bool isIdentifier(string lex)
-        {
-            // Check if the lex is an identifier or not.
-            if (new Regex(regexHelper.ident, RegexOptions.Compiled | RegexOptions.IgnoreCase)
-                .IsMatch(lex))
-                return true;
-
-            return false;
-        }
-        bool isConstant(string lex)
-        {
-            // Check if the lex is a constant (Number) or not.
-
-            if (new Regex(regexHelper.number, RegexOptions.Compiled | RegexOptions.IgnoreCase)
-                .IsMatch(lex))
-                return true;
-
-            return false;
-        }
-        bool isString(string lex)
-        {
-            // Check if the lex is a constant (Number) or not.
-            if (new Regex(regexHelper.literalString, RegexOptions.Compiled | RegexOptions.IgnoreCase)
-                .IsMatch(lex))
-                return true;
-
-            return false;
-        }
-        bool isComment(string lex)
-        {
-            // Check if the lex is a constant (Number) or not.
-
-            if (new Regex(regexHelper.commentStatement, RegexOptions.Compiled | RegexOptions.IgnoreCase)
-                .IsMatch(lex))
-                return true;
-
-            return false;
+            return Token_Class.Undifined;
         }
     }
 }

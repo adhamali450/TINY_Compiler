@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +17,15 @@ namespace TINY_Compiler
         public HomePage()
         {
             InitializeComponent();
+
+            PrivateFontCollection pfc = new PrivateFontCollection();
+            int fontLength = Properties.Resources.JetBrainsMono_Regular.Length;
+            byte[] fontdata = Properties.Resources.JetBrainsMono_Regular;
+            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontdata, 0, data, fontLength);
+            pfc.AddMemoryFont(data, fontLength);
+
+            boxSrc.Font = new Font(pfc.Families[0], label1.Font.Size);
         }
 
         private void ClearTokensList()
@@ -42,7 +53,7 @@ namespace TINY_Compiler
         void PopulateErrors()
         {
             for (int i = 0; i < Errors.Error_List.Count; i++)
-                boxErrors.AppendText($"{Environment.NewLine}[{i+1}] {Errors.Error_List[i]}");
+                boxErrors.AppendText($"[{i+1}] {Errors.Error_List[i]}{Environment.NewLine}");
         }
 
 

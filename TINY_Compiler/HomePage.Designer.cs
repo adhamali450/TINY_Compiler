@@ -29,6 +29,7 @@ namespace TINY_Compiler
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.boxSrc = new System.Windows.Forms.TextBox();
             this.ListTokens = new System.Windows.Forms.DataGridView();
@@ -45,6 +46,7 @@ namespace TINY_Compiler
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(12, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(121, 23);
@@ -56,28 +58,45 @@ namespace TINY_Compiler
             this.boxSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.boxSrc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.boxSrc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.boxSrc.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.boxSrc.ForeColor = System.Drawing.Color.White;
             this.boxSrc.Location = new System.Drawing.Point(12, 43);
             this.boxSrc.Multiline = true;
             this.boxSrc.Name = "boxSrc";
-            this.boxSrc.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.boxSrc.Size = new System.Drawing.Size(622, 436);
+            this.boxSrc.Size = new System.Drawing.Size(619, 436);
             this.boxSrc.TabIndex = 1;
             // 
             // ListTokens
             // 
             this.ListTokens.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ListTokens.BackgroundColor = System.Drawing.SystemColors.ScrollBar;
+            this.ListTokens.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ListTokens.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.ListTokens.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ListTokens.ColumnHeadersVisible = false;
             this.ListTokens.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.lexemes,
             this.tokenClasses});
+            this.ListTokens.EnableHeadersVisualStyles = false;
+            this.ListTokens.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ListTokens.Location = new System.Drawing.Point(640, 43);
             this.ListTokens.Name = "ListTokens";
             this.ListTokens.RowHeadersWidth = 51;
-            this.ListTokens.RowTemplate.Height = 29;
+            this.ListTokens.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ListTokens.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.ListTokens.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ListTokens.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
+            this.ListTokens.RowTemplate.Height = 25;
+            this.ListTokens.RowTemplate.ReadOnly = true;
             this.ListTokens.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ListTokens.Size = new System.Drawing.Size(303, 436);
             this.ListTokens.TabIndex = 2;
@@ -101,12 +120,16 @@ namespace TINY_Compiler
             // btnCompile
             // 
             this.btnCompile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCompile.Location = new System.Drawing.Point(487, 484);
+            this.btnCompile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnCompile.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(91)))), ((int)(((byte)(153)))));
+            this.btnCompile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCompile.ForeColor = System.Drawing.Color.White;
+            this.btnCompile.Location = new System.Drawing.Point(484, 488);
             this.btnCompile.Name = "btnCompile";
             this.btnCompile.Size = new System.Drawing.Size(147, 30);
             this.btnCompile.TabIndex = 3;
             this.btnCompile.Text = "Compile";
-            this.btnCompile.UseVisualStyleBackColor = true;
+            this.btnCompile.UseVisualStyleBackColor = false;
             this.btnCompile.Click += new System.EventHandler(this.btnCompile_Click);
             // 
             // label2
@@ -114,6 +137,7 @@ namespace TINY_Compiler
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(12, 534);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 23);
@@ -124,7 +148,7 @@ namespace TINY_Compiler
             // 
             this.boxErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.boxErrors.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.boxErrors.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.boxErrors.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.boxErrors.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.boxErrors.ForeColor = System.Drawing.Color.Red;
@@ -132,25 +156,30 @@ namespace TINY_Compiler
             this.boxErrors.Multiline = true;
             this.boxErrors.Name = "boxErrors";
             this.boxErrors.ReadOnly = true;
-            this.boxErrors.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.boxErrors.Size = new System.Drawing.Size(931, 133);
             this.boxErrors.TabIndex = 5;
             // 
             // btnClearList
             // 
             this.btnClearList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClearList.Location = new System.Drawing.Point(796, 484);
+            this.btnClearList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnClearList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnClearList.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(91)))), ((int)(((byte)(153)))));
+            this.btnClearList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClearList.ForeColor = System.Drawing.Color.White;
+            this.btnClearList.Location = new System.Drawing.Point(796, 488);
             this.btnClearList.Name = "btnClearList";
             this.btnClearList.Size = new System.Drawing.Size(147, 30);
             this.btnClearList.TabIndex = 6;
             this.btnClearList.Text = "Clear";
-            this.btnClearList.UseVisualStyleBackColor = true;
+            this.btnClearList.UseVisualStyleBackColor = false;
             this.btnClearList.Click += new System.EventHandler(this.btnClearList_Click);
             // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.ClientSize = new System.Drawing.Size(967, 705);
             this.Controls.Add(this.btnClearList);
             this.Controls.Add(this.boxErrors);
