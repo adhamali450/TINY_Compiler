@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-public enum Token_Class
+public enum TokenClass
 {
     Idenifier, Constant,
 
@@ -17,14 +17,17 @@ public enum Token_Class
     
     LParanthesis, RParanthesis,
     LCurlyBracket, RCurlyBracket,
-    Semicolon, Comma,
+    Semicolon, Comma, 
 
     AndOp, OrOp,
     IsEqualOp, IsLessThanOp, IsGreaterThanOp, IsNotEqualOp,
     PlusOp, MinusOp, MultiplyOp, DivideOp,
     AssignmentOp,
 
-    Comment, Undifined,
+    Comment,
+
+    Invalid, // invalid token is like a comment missing */ or a string missing a "
+    Undefined, // undefined token is a lexeme that don't have an equivalent token (i.e. $=)
 }
 
 namespace TINY_Compiler
@@ -32,7 +35,7 @@ namespace TINY_Compiler
     public class Token
     {
         public string Lexeme;
-        public Token_Class TokenType;
+        public TokenClass TokenType;
     }
 
 
@@ -97,58 +100,60 @@ namespace TINY_Compiler
         }
 
         public List<Token> Tokens = new List<Token>();
-        Dictionary<string, Token_Class> ReservedWords = new Dictionary<string, Token_Class>();
-        Dictionary<string, Token_Class> Operators = new Dictionary<string, Token_Class>();
+        Dictionary<string, TokenClass> ReservedWords = new Dictionary<string, TokenClass>();
+        Dictionary<string, TokenClass> Operators = new Dictionary<string, TokenClass>();
 
 
         public Scanner()
         {
-            ReservedWords.Add("INT", Token_Class.Int);
-            ReservedWords.Add("FLOAT", Token_Class.Float);
-            ReservedWords.Add("STRING", Token_Class.String);
+            ReservedWords.Add("INT", TokenClass.Int);
+            ReservedWords.Add("FLOAT", TokenClass.Float);
+            ReservedWords.Add("STRING", TokenClass.String);
 
-            ReservedWords.Add("READ", Token_Class.Read);
-            ReservedWords.Add("WRITE", Token_Class.Write);
-            ReservedWords.Add("REPEAT", Token_Class.Repeat);
-            ReservedWords.Add("UNITL", Token_Class.Until);
-            ReservedWords.Add("IF", Token_Class.If);
-            ReservedWords.Add("ELSEIF", Token_Class.Elseif);
-            ReservedWords.Add("ELSE", Token_Class.Else);
-            ReservedWords.Add("THEN", Token_Class.Then);
-            ReservedWords.Add("RETURN", Token_Class.Return);
-            ReservedWords.Add("ENDL", Token_Class.Endl);
+            ReservedWords.Add("READ", TokenClass.Read);
+            ReservedWords.Add("WRITE", TokenClass.Write);
+            ReservedWords.Add("REPEAT", TokenClass.Repeat);
+            ReservedWords.Add("UNITL", TokenClass.Until);
+            ReservedWords.Add("IF", TokenClass.If);
+            ReservedWords.Add("ELSEIF", TokenClass.Elseif);
+            ReservedWords.Add("ELSE", TokenClass.Else);
+            ReservedWords.Add("THEN", TokenClass.Then);
+            ReservedWords.Add("RETURN", TokenClass.Return);
+            ReservedWords.Add("ENDL", TokenClass.Endl);
 
-            Operators.Add(":=", Token_Class.AssignmentOp);
-            Operators.Add(";", Token_Class.Semicolon);
-            Operators.Add(",", Token_Class.Comma);
-            Operators.Add("(", Token_Class.LParanthesis);
-            Operators.Add(")", Token_Class.RParanthesis);
-            Operators.Add("{", Token_Class.LCurlyBracket);
-            Operators.Add("}", Token_Class.RCurlyBracket);
-            Operators.Add("=", Token_Class.IsEqualOp);
-            Operators.Add("<", Token_Class.IsLessThanOp);
-            Operators.Add(">", Token_Class.IsGreaterThanOp);
-            Operators.Add("<>", Token_Class.IsNotEqualOp);
-            Operators.Add("+", Token_Class.PlusOp);
-            Operators.Add("-", Token_Class.MinusOp);
-            Operators.Add("*", Token_Class.MultiplyOp);
-            Operators.Add("/", Token_Class.DivideOp);
-            Operators.Add("||", Token_Class.OrOp);
-            Operators.Add("&&", Token_Class.AndOp);
+            Operators.Add(":=", TokenClass.AssignmentOp);
+            Operators.Add(";", TokenClass.Semicolon);
+            Operators.Add(",", TokenClass.Comma);
+            Operators.Add("(", TokenClass.LParanthesis);
+            Operators.Add(")", TokenClass.RParanthesis);
+            Operators.Add("{", TokenClass.LCurlyBracket);
+            Operators.Add("}", TokenClass.RCurlyBracket);
+            Operators.Add("=", TokenClass.IsEqualOp);
+            Operators.Add("<>", TokenClass.IsNotEqualOp);
+            Operators.Add("<", TokenClass.IsLessThanOp);
+            Operators.Add(">", TokenClass.IsGreaterThanOp);
+            Operators.Add("+", TokenClass.PlusOp);
+            Operators.Add("-", TokenClass.MinusOp);
+            Operators.Add("*", TokenClass.MultiplyOp);
+            Operators.Add("/", TokenClass.DivideOp);
+            Operators.Add("||", TokenClass.OrOp);
+            Operators.Add("&&", TokenClass.AndOp);
         }
         
         public void StartScanning(string sourceCode)
         {
+            sourceCode += " "; // to avoid any IndexOutOfRangeException
+
             for (int i = 0; i < sourceCode.Length; i++)
             {
-                Token_Class tokenClass = Token_Class.Undifined;
+                TokenClass tokenClass = TokenClass.Undefined;
 
-                bool returned = false; // True when the lexeme generates a valid token
+                bool returned; // True when the lexeme generates a valid token
                 int j = i;
                 char currentChar = sourceCode[i];
                 string currentLexeme = currentChar.ToString();
 
-                if (currentChar == ' ' || currentChar == '\r' || currentChar == '\n')
+                if (currentChar == ' ' || currentChar == '\r' || currentChar == '\n' || currentChar == '\t')
                     continue;
 
                 //string literal
@@ -167,10 +172,6 @@ namespace TINY_Compiler
                                 continue;
                             }
 
-                            // TODO: remove if not needed
-                            /*if (!char.IsLetterOrDigit(SourceCode[j + 1]) && SourceCode[j + 1] != '"')
-                                break;*/
-
                             currentLexeme += sourceCode[j + 1];
                             j++;
 
@@ -183,13 +184,14 @@ namespace TINY_Compiler
                         }
                         if (!returned)
                         {
-                            string errorMsg = "\" expected at the end of " + currentLexeme;
-                            Errors.Error_List.Add(errorMsg);
+                            tokenClass = TokenClass.Invalid;
+                            string errorMsg = $"\" expected at the end of {currentLexeme}";
+                            Errors.ErrorList.Add(errorMsg);
                             Debug.WriteLine(errorMsg);
                         }
                         else
                         {
-                            tokenClass = Token_Class.String;
+                            tokenClass = TokenClass.String;
                         }
                         
                         i = j;
@@ -226,9 +228,12 @@ namespace TINY_Compiler
                             returned = false;
 
                         if (!returned)
-                            Errors.Error_List.Add("Invalid constant  " + currentLexeme);
+                        {
+                            tokenClass = TokenClass.Invalid;
+                            Errors.ErrorList.Add($"Invalid constant  {currentLexeme}");
+                        }
                         else
-                            tokenClass = Token_Class.Constant;
+                            tokenClass = TokenClass.Constant;
 
                         i = j;
 
@@ -245,13 +250,6 @@ namespace TINY_Compiler
                     {
                         while (j + 1 < sourceCode.Length)
                         {
-                            //any spaces or new lines shouldn't be ignored when it comes to comments
-
-                            //if (SourceCode[j + 1] == ' ' || SourceCode[j + 1] == '\r' || SourceCode[j + 1] == '\n')
-                            //{
-                            //    j++;
-                            //    continue;
-                            //}
 
                             currentLexeme += sourceCode[j + 1];
                             j++;
@@ -265,9 +263,12 @@ namespace TINY_Compiler
                         }
 
                         if (!returned)
-                            Errors.Error_List.Add("Invalid comment " + currentLexeme);
+                        {
+                            tokenClass = TokenClass.Invalid;
+                            Errors.ErrorList.Add($"Invalid comment {currentLexeme}");
+                        }
                         else
-                            tokenClass = Token_Class.Comment;
+                            tokenClass = TokenClass.Comment;
 
                         i = j;
                     }
@@ -297,12 +298,15 @@ namespace TINY_Compiler
                         }
 
                         if (!returned)
-                            Errors.Error_List.Add("Invalid identifier  " + currentLexeme);
+                        {
+                            tokenClass = TokenClass.Invalid;
+                            Errors.ErrorList.Add($"Invalid identifier {currentLexeme}");
+                        }
                         else
                         {
                             tokenClass = getReservedWordTokenClass(currentLexeme);
-                            if (tokenClass == Token_Class.Undifined)
-                                tokenClass = Token_Class.Idenifier;
+                            if (tokenClass == TokenClass.Undefined)
+                                tokenClass = TokenClass.Idenifier;
                         }
 
                         i = j;
@@ -311,13 +315,28 @@ namespace TINY_Compiler
 
                 //operator
                 // we have 2 types of operators in TINY: 
-                //    - single character operators (i.e. +, -, *, /)
+                //    - single character operators (i.e. +, -, *, /, <, >)
                 //    - double characters operators (i.e. !=, ||, &&)
+                //    - composite characters operators (i.e. <>)
 
-                // single character operators (i.e. +, -, *, /)
+
                 else if (Operators.ContainsKey(currentLexeme))
                 {
-                    tokenClass = Operators[currentLexeme];
+                    // composite characters operators 
+                    if (currentChar == '<' && sourceCode[i + 1] == '>')
+                    {
+                        currentLexeme += sourceCode[i + 1];
+                        tokenClass = Operators[currentLexeme];
+
+                        j += 2;
+                        i = j;
+                    }
+
+                    // single character operators
+                    else
+                    {
+                        tokenClass = Operators[currentLexeme];
+                    }
                 }
 
                 // double character (i.e. :=, &&, ||)
@@ -333,18 +352,24 @@ namespace TINY_Compiler
 
                 }
 
-                Tokens.Add(new Token() { Lexeme = currentLexeme, TokenType = tokenClass });
+
+                if (tokenClass == TokenClass.Invalid)
+                    continue;
+                else if(tokenClass == TokenClass.Undefined)
+                    Errors.ErrorList.Add($"Un-identified token: {currentLexeme}");
+                else // valid token
+                    Tokens.Add(new Token() { Lexeme = currentLexeme, TokenType = tokenClass });
             }
 
             TINY_Compiler.TokenStream = Tokens;
         }
 
-        Token_Class getReservedWordTokenClass(string lexeme)
+        TokenClass getReservedWordTokenClass(string lexeme)
         {
             if (ReservedWords.ContainsKey(lexeme.ToUpper()))
                 return ReservedWords[lexeme.ToUpper()];
 
-            return Token_Class.Undifined;
+            return TokenClass.Undefined;
         }
     }
 }

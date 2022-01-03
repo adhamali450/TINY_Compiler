@@ -37,7 +37,7 @@ namespace TINY_Compiler
         private void ClearErrorsList()
         {
             boxErrors.Clear();
-            Errors.Error_List.Clear();
+            Errors.ErrorList.Clear();
         }
 
         void PopulateTokens()
@@ -52,8 +52,8 @@ namespace TINY_Compiler
 
         void PopulateErrors()
         {
-            for (int i = 0; i < Errors.Error_List.Count; i++)
-                boxErrors.AppendText($"[{i+1}] {Errors.Error_List[i]}{Environment.NewLine}");
+            for (int i = 0; i < Errors.ErrorList.Count; i++)
+                boxErrors.AppendText($"[{i+1}] {Errors.ErrorList[i]}{Environment.NewLine}");
         }
 
 
