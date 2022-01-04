@@ -64,7 +64,7 @@ namespace TINY_Compiler
                 functionCall = $@"{ident}\s*\(\s*({ident}(\s*,\s*{ident})*)*\s*\)",
                 term = $@"({signedFloat}|{functionCall}|{ident})",
                 arithmaticOperator = $@"\+|-|\*|/",
-                equation = $@"", //TODO
+                equation = $@"",
                                  //expression = $@"{literalString}|{term}|{equation}", //SHOULD_BE
                 expression = $@"({literalString}|{term})",
                 assignmentSt = $@"{ident}{eq}{expression}\s*;",
@@ -86,7 +86,7 @@ namespace TINY_Compiler
                 elseSt = $@"else\sthen\s({statement}\s*)*\send",
                 ifSt = $@"{ifTemplate.Replace("#", "if")}\s({elseifSt})*\s({elseSt})*",
 
-                repeatSt = $@"repeat\s({statement})*\suntil\s{conditionalSt}",
+                repeatSt = $@"repeat\s({statement})+\suntil\s{conditionalSt}",
 
                 fnName = ident,
                 parameter = $@"{dtType}\s{ident}",

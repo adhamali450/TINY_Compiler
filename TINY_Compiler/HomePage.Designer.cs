@@ -39,6 +39,7 @@ namespace TINY_Compiler
             this.label2 = new System.Windows.Forms.Label();
             this.boxErrors = new System.Windows.Forms.TextBox();
             this.btnClearList = new System.Windows.Forms.Button();
+            this.parseTree = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.ListTokens)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,7 +66,7 @@ namespace TINY_Compiler
             this.boxSrc.Location = new System.Drawing.Point(12, 43);
             this.boxSrc.Multiline = true;
             this.boxSrc.Name = "boxSrc";
-            this.boxSrc.Size = new System.Drawing.Size(619, 436);
+            this.boxSrc.Size = new System.Drawing.Size(733, 466);
             this.boxSrc.TabIndex = 1;
             // 
             // ListTokens
@@ -88,7 +89,7 @@ namespace TINY_Compiler
             this.tokenClasses});
             this.ListTokens.EnableHeadersVisualStyles = false;
             this.ListTokens.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.ListTokens.Location = new System.Drawing.Point(640, 43);
+            this.ListTokens.Location = new System.Drawing.Point(750, 43);
             this.ListTokens.Name = "ListTokens";
             this.ListTokens.RowHeadersWidth = 51;
             this.ListTokens.RowTemplate.DefaultCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -98,7 +99,7 @@ namespace TINY_Compiler
             this.ListTokens.RowTemplate.Height = 25;
             this.ListTokens.RowTemplate.ReadOnly = true;
             this.ListTokens.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.ListTokens.Size = new System.Drawing.Size(303, 436);
+            this.ListTokens.Size = new System.Drawing.Size(253, 466);
             this.ListTokens.TabIndex = 2;
             // 
             // lexemes
@@ -124,7 +125,7 @@ namespace TINY_Compiler
             this.btnCompile.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(91)))), ((int)(((byte)(153)))));
             this.btnCompile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCompile.ForeColor = System.Drawing.Color.White;
-            this.btnCompile.Location = new System.Drawing.Point(484, 488);
+            this.btnCompile.Location = new System.Drawing.Point(1102, 519);
             this.btnCompile.Name = "btnCompile";
             this.btnCompile.Size = new System.Drawing.Size(147, 30);
             this.btnCompile.TabIndex = 3;
@@ -156,7 +157,7 @@ namespace TINY_Compiler
             this.boxErrors.Multiline = true;
             this.boxErrors.Name = "boxErrors";
             this.boxErrors.ReadOnly = true;
-            this.boxErrors.Size = new System.Drawing.Size(931, 133);
+            this.boxErrors.Size = new System.Drawing.Size(1390, 133);
             this.boxErrors.TabIndex = 5;
             // 
             // btnClearList
@@ -167,7 +168,7 @@ namespace TINY_Compiler
             this.btnClearList.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(91)))), ((int)(((byte)(153)))));
             this.btnClearList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClearList.ForeColor = System.Drawing.Color.White;
-            this.btnClearList.Location = new System.Drawing.Point(796, 488);
+            this.btnClearList.Location = new System.Drawing.Point(1255, 519);
             this.btnClearList.Name = "btnClearList";
             this.btnClearList.Size = new System.Drawing.Size(147, 30);
             this.btnClearList.TabIndex = 6;
@@ -175,12 +176,22 @@ namespace TINY_Compiler
             this.btnClearList.UseVisualStyleBackColor = false;
             this.btnClearList.Click += new System.EventHandler(this.btnClearList_Click);
             // 
+            // parseTree
+            // 
+            this.parseTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.parseTree.Location = new System.Drawing.Point(1009, 43);
+            this.parseTree.Name = "parseTree";
+            this.parseTree.Size = new System.Drawing.Size(393, 466);
+            this.parseTree.TabIndex = 7;
+            // 
             // HomePage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(967, 705);
+            this.ClientSize = new System.Drawing.Size(1426, 705);
+            this.Controls.Add(this.parseTree);
             this.Controls.Add(this.btnClearList);
             this.Controls.Add(this.boxErrors);
             this.Controls.Add(this.label2);
@@ -207,6 +218,7 @@ namespace TINY_Compiler
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox boxErrors;
         private System.Windows.Forms.Button btnClearList;
+        private System.Windows.Forms.TreeView parseTree;
     }
 }
 

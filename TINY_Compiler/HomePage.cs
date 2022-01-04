@@ -34,6 +34,11 @@ namespace TINY_Compiler
             TINY_Compiler.TokenStream.Clear();
         }
 
+        private void ClearParseTree()
+        {
+            parseTree.Nodes.Clear();
+        }
+
         private void ClearErrorsList()
         {
             boxErrors.Clear();
@@ -65,13 +70,19 @@ namespace TINY_Compiler
 
             string srcCode = boxSrc.Text;
             TINY_Compiler.Start_Compiling(srcCode);
+
             PopulateTokens();
+
+            ClearParseTree();
+            parseTree.Nodes.Add(Parser.PrintParseTree(TINY_Compiler.treeroot));
+
             PopulateErrors();
         }
 
         private void btnClearList_Click(object sender, EventArgs e)
         {
             ClearTokensList();
+            ClearParseTree();
             ClearErrorsList();
         }
 
