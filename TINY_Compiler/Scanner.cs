@@ -26,6 +26,8 @@ public enum TokenClass
 
     Comment,
 
+    End,
+
     Invalid, // invalid token is like a comment missing */ or a string missing a "
     Undefined, // undefined token is a lexeme that don't have an equivalent token (i.e. $=)
 }
@@ -120,6 +122,8 @@ namespace TINY_Compiler
             ReservedWords.Add("THEN", TokenClass.Then);
             ReservedWords.Add("RETURN", TokenClass.Return);
             ReservedWords.Add("ENDL", TokenClass.Endl);
+
+            ReservedWords.Add("END", TokenClass.End);
 
             Operators.Add(":=", TokenClass.AssignmentOp);
             Operators.Add(";", TokenClass.Semicolon);
